@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# Layer files
+layer/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Compiled JavaScript files
+*.js
+*.js.map
+
+# Coverage
+coverage/
+
+# IntelliJ IDEA files
+.idea/
+
+# Other files
+.DS_Store
+.env
+
+# Exclude
+!jest.config.js
