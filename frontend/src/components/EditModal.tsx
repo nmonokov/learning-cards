@@ -48,6 +48,12 @@ const EditModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, 
       setError('All fields are required.');
       return false;
     }
+    const formattedWordFound = words.split('\n').find((word: string) => /\b\w+-\w+\b/.test(word));
+    if (!formattedWordFound) {
+      setError('Add at least one word pair in correct format "example-example"');
+      return false;
+    }
+
     setError('');
     return true;
   };
