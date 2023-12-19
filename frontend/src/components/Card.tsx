@@ -65,7 +65,7 @@ const Card: React.FC<CardProps> = ({
   };
 
   const getHint = (text: string) => {
-    return text.charAt(0) + '_'.repeat(text.length - 2);
+    return text.charAt(0) + '_'.repeat(text.length - 1);
   };
 
   const dragTransform = `translateX(${dragDelta}px)`;

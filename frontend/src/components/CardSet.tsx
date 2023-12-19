@@ -32,9 +32,14 @@ const CardSet = () => {
     navigate('/'); // Navigate back to the collection page
   };
 
+  const cardsCounter = `${currentIndex + 1} / ${initialCards.length}`;
+
   return (
     <div className="card-set">
-      <i className="fas fa-arrow-left back-icon" onClick={goBack}></i> {/* Back icon */}
+      <div className="card-set-header">
+        <i className="fas fa-arrow-left back-icon" onClick={goBack}></i> {/* Back icon */}
+        <div className="cards-counter">{cardsCounter}</div>
+      </div>
       {initialCards.length > 0 && (
         /* Card component */
         <Card
