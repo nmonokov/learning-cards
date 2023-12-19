@@ -1,34 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import './CardModal.css';
+import './Modal.css';
 import { CardData } from '../data/cardCollections';
 
 type AddCardSetModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onUpsert: (newSet: any) => void;
+  mode: string;
   data: any;
 };
 
-const CardModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, data  }) => {
-
-  const [name, setName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [words, setWords] = useState<string>('');
-  const [error, setError] = useState<string>('');
-
-
-  useEffect(() => {
-    if (data) {
-      setName(data.name || '');
-      setDescription(data.description || '');
-      setWords(convertWordsForEdit(data.cards));
-    }
-  }, [data])
-
+const EditModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, mode, data }) => {
   const convertWordsForEdit = (formattedWords: CardData[]): string =>
     formattedWords && formattedWords.length > 0 ? formattedWords.map((formattedWord: CardData) =>
       `${formattedWord.word}-${formattedWord.translation}`)
       .join('\n') : '';
+  const [name, setName] = useState<string>(data?.name || '');
+  const [description, setDescription] = useState<string>(data?.description || '');
+  const [words, setWords] = useState<string>(convertWordsForEdit(data.cards));
+  const [error, setError] = useState<string>('');
+
+
+  useEffect(() => {
+    if (mode === 'update' && data) {
+      setName(data.name || '');
+      setDescription(data.description || '');
+      setWords(convertWordsForEdit(data.cards));
+    } else if (mode === 'new') {
+      setName('');
+      setDescription('');
+      setWords('');
+    }
+  }, [mode, data])
 
   const processWords = (wordsString: string): { word: string; translation: string }[] => {
     return wordsString.split('\n')
@@ -62,11 +65,11 @@ const CardModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, 
       description,
       words: newWords,
     };
-    onUpsert(newCardSet);
-    onClose();
     setName('');
     setDescription('');
     setWords('');
+    onUpsert(newCardSet);
+    onClose();
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -91,4 +94,4 @@ const CardModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, 
   );
 };
 
-export default CardModal;
+export default EditModal;

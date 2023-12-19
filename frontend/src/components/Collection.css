@@ -48,23 +48,35 @@
 }
 
 .card-set-collection-view-set {
-    /* ... existing styles ... */
     position: relative; /* Needed for absolute positioning of children */
 }
 
-.edit-button {
+.card-set-collection-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-button,
+.delete-button {
     position: absolute;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
-    background-color: #f0f0f0; /* Example background color */
+    background-color: #f0f0f0;
     padding: 5px;
-    border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.edit-button:hover {
+.edit-button:hover,
+.delete-button:hover {
     background-color: #e0e0e0; /* Slightly darker on hover */
+}
+
+.edit-button {
+    right: 35px;
+}
+
+.delete-button {
+    right: 15px;
 }
 
 .edit-button i {

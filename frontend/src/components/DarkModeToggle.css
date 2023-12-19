@@ -42,6 +42,16 @@ body {
     color: white
 }
 
+.dark-mode .edit-button,
+.dark-mode .delete-button {
+    background-color: #000000;
+    transition: 0.3s ease background-color;
+}
+
+.dark-mode .modal-content p {
+    color: black;
+}
+
 /* Toggle style */
 * {
     user-select: none;
