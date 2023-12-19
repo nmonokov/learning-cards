@@ -1,9 +1,6 @@
 /* Light mode styles */
 body,
 .dark-mode,
-.dark-mode .background-card,
-.dark-mode .card .card-front,
-.dark-mode .card .card-back,
 .dark-mode .card-set-collection-view-set,
 .dark-mode .card-set-new,
 label {
@@ -16,29 +13,30 @@ body {
 }
 
 .dark-mode {
-    background-color: #343541;
+    background-color: #161617;
     color: white;
 }
 
 .dark-mode .background-card,
 .dark-mode .card .card-front,
 .dark-mode .card .card-back,
-.dark-mode .card-set-collection-view-set
-{
+.dark-mode .card-set-collection-view-set {
     background-color: #000000;
     color: white;
     border: none;
 }
 
 .dark-mode .card-set-new {
-    background-color: #343541;
+    background-color: #161617;
 }
 
 .dark-mode .card-set-new {
     border: 2px dashed white;
 }
 .dark-mode .card-set-new i,
-.dark-mode .card-set-header i {
+.dark-mode .card-set-header i,
+.dark-mode .modal-content input,
+.dark-mode .modal-content textarea {
     color: white
 }
 
