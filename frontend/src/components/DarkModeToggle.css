@@ -1,16 +1,25 @@
 /* Light mode styles */
-.light-mode {
+body,
+.dark-mode,
+.dark-mode .background-card,
+.dark-mode .card .card-front,
+.dark-mode .card .card-back,
+.dark-mode .card-set-collection-view-set,
+.dark-mode .card-set-new,
+label {
+    transition: 0.3s ease background-color;
+}
+
+body {
     background-color: white;
     color: black;
 }
 
-/* Dark mode styles */
 .dark-mode {
     background-color: #343541;
     color: white;
 }
 
-/* Card styles in dark mode */
 .dark-mode .background-card,
 .dark-mode .card .card-front,
 .dark-mode .card .card-back,
@@ -38,12 +47,6 @@
     user-select: none;
 }
 
-body {
-    margin: 0;
-    background-color: #fff;
-    transition: background-color 0.3s;
-}
-
 #toggle_checkbox {
     display: none;
 }
@@ -57,7 +60,6 @@ label {
     background-color: #77b5fe;
     border-radius: 30px;
     cursor: pointer;
-    transition: 0.3s ease background-color;
     overflow: hidden;
 }
 
