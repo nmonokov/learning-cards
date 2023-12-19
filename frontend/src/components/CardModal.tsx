@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
-import './AddCardSetModal.css';
+import React, { useEffect, useState } from 'react';
+import './CardModal.css';
+import { CardData } from '../data/cardCollections';
 
 type AddCardSetModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (newSet: any) => void;
+  onUpsert: (newSet: any) => void;
+  data: any;
 };
 
-const AddCardSetModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onAdd  }) => {
+const CardModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, data  }) => {
+
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [words, setWords] = useState<string>('');
   const [error, setError] = useState<string>('');
+
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name || '');
+      setDescription(data.description || '');
+      setWords(convertWordsForEdit(data.cards));
+    }
+  }, [data])
+
+  const convertWordsForEdit = (formattedWords: CardData[]): string =>
+    formattedWords && formattedWords.length > 0 ? formattedWords.map((formattedWord: CardData) =>
+      `${formattedWord.word}-${formattedWord.translation}`)
+      .join('\n') : '';
 
   const processWords = (wordsString: string): { word: string; translation: string }[] => {
     return wordsString.split('\n')
@@ -36,7 +53,8 @@ const AddCardSetModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onAd
     if (!validateFields()) {
       return;
     }
-    const key = name.replace(/\s+/g, '').toLowerCase();
+    const formattedName = name.trim().split(' ').join('');
+    const key = `${formattedName.charAt(0).toLowerCase()}${formattedName.slice(1)}`
     const newWords = processWords(words);
     const newCardSet = {
       key,
@@ -44,8 +62,11 @@ const AddCardSetModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onAd
       description,
       words: newWords,
     };
-    onAdd(newCardSet);
+    onUpsert(newCardSet);
     onClose();
+    setName('');
+    setDescription('');
+    setWords('');
   };
 
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -70,4 +91,4 @@ const AddCardSetModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onAd
   );
 };
 
-export default AddCardSetModal;
+export default CardModal;

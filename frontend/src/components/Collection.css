@@ -46,3 +46,27 @@
     font-size: 24px;
     color: #333;
 }
+
+.card-set-collection-view-set {
+    /* ... existing styles ... */
+    position: relative; /* Needed for absolute positioning of children */
+}
+
+.edit-button {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    background-color: #f0f0f0; /* Example background color */
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #e0e0e0; /* Slightly darker on hover */
+}
+
+.edit-button i {
+    font-size: 14px; /* Adjust the size of the icon */
+}

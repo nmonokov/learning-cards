@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Collection.css';
 import { CollectionData, data } from '../data/cardCollections';
-import AddCardSetModal from './AddCardSetModal';
+import CardModal from './CardModal';
 
 export const getCardSets = () => Object.entries(data).map(([id, collection]) => {
   return {
@@ -14,12 +14,16 @@ export const getCardSets = () => Object.entries(data).map(([id, collection]) => 
 
 const Collection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cardSetEdit, setCardSetEdit] = useState({});
 
   const navigate = useNavigate();
 
   const cardSets = getCardSets();
 
-  const navigateToCardSet = (setId: string) => {
+  const navigateToCardSet = (target: EventTarget, setId: string) => {
+    if ((target as HTMLElement).closest('.edit-button')) {
+      return; // Do nothing if the click was on the hint
+    }
     navigate(`/cards/${setId}`);
   };
 
@@ -27,7 +31,7 @@ const Collection = () => {
     setIsModalOpen(true);
   };
 
-  const handleNewCardSetAdd = (newData: any) => {
+  const handleCardSetUpsert = (newData: any) => {
     const newSet: CollectionData = {
       name: newData.name,
       description: newData.description,
@@ -41,10 +45,21 @@ const Collection = () => {
     setIsModalOpen(false);
   };
 
+  const handleEdit = (cardSetId: string) => {
+    if (!cardSetId) {
+      return;
+    }
+    setCardSetEdit(data[cardSetId]);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="collection">
       {cardSets.map((set) => (
-        <div key={set.id} className="card-set-collection-view-set" onClick={() => navigateToCardSet(set.id)}>
+        <div key={set.id} className="card-set-collection-view-set" onClick={(e) => navigateToCardSet(e.target, set.id)}>
+          <div className="edit-button" onClick={() => handleEdit(set.id)}>
+            <i className="fas fa-pen"></i> {/* Using Font Awesome pen icon */}
+          </div>
           <h3>{set.name}</h3>
           <p>{set.description}</p>
         </div>
@@ -54,10 +69,11 @@ const Collection = () => {
           <i className="fas fa-plus"></i>
         </div>
       </div>
-      <AddCardSetModal
+      <CardModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onAdd={handleNewCardSetAdd}
+        onUpsert={handleCardSetUpsert}
+        data={cardSetEdit}
       />
     </div>
   );
