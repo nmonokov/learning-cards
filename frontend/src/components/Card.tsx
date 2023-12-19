@@ -20,17 +20,24 @@ const Card: React.FC<CardProps> = ({
   const [startX, setStartX] = useState<number>(0);
   const [dragDelta, setDragDelta] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
 
   const swipeThreshold = 200; // Swipe threshold
 
-  const handleGestureStart = (clientX: number) => {
-    setStartX(clientX);
+  const handleGestureStart = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('.hint-button, .hint-text')) {
+      return; // Do nothing if the click was on the hint
+    }
+    setStartX(e.clientX);
     setIsDragging(true);
   };
 
-  const handleGestureMove = (clientX: number) => {
+  const handleGestureMove = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('.hint-button, .hint-text')) {
+      return; // Do nothing if the click was on the hint
+    }
     if (isDragging) {
-      const deltaX = clientX - startX;
+      const deltaX = e.clientX - startX;
       setDragDelta(deltaX);
 
       if (Math.abs(deltaX) > swipeThreshold) {
@@ -42,12 +49,23 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
-  const handleGestureEnd = () => {
+  const handleGestureEnd = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('.hint-button, .hint-text')) {
+      return; // Do nothing if the click was on the hint
+    }
     if (Math.abs(dragDelta) < 10) {
       setIsFlipped(!isFlipped);  // Flip the card on a click (not drag)
     }
     setIsDragging(false);
     setDragDelta(0); // Reset dragDelta when gesture ends
+  };
+
+  const handleHintClick = () => {
+    setShowHint(!showHint);
+  };
+
+  const getHint = (text: string) => {
+    return text.charAt(0) + '_'.repeat(text.length - 2);
   };
 
   const dragTransform = `translateX(${dragDelta}px)`;
@@ -60,9 +78,9 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       className={`card-container`}
-      onMouseDown={(e) => handleGestureStart(e.clientX)}
-      onMouseMove={(e) => handleGestureMove(e.clientX)}
-      onMouseUp={handleGestureEnd}
+      onMouseDown={(e) => handleGestureStart(e)}
+      onMouseMove={(e) => handleGestureMove(e)}
+      onMouseUp={(e) => handleGestureEnd(e)}
     >
       <div
         className={`background-card`}
@@ -73,7 +91,18 @@ const Card: React.FC<CardProps> = ({
       >
       </div>
       <div className={`card ${isFlipped ? 'flipped' : ''}`} style={cardStyle}>
-        <div className="card-front">{word}</div>
+        <div className="card-front">
+          {word}
+          {!showHint ? (
+            <div className="hint-button" onClick={handleHintClick}>
+              <i className="fas fa-lightbulb"></i> hint
+            </div>
+          ) : (
+            <div className="hint-text" onClick={handleHintClick}>
+              <i className="fas fa-lightbulb"></i> {getHint(translation)}
+            </div>
+          )}
+        </div>
         <div className="card-back">{translation}</div>
       </div>
     </div>

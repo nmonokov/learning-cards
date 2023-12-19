@@ -57,3 +57,12 @@
 .card.flipped .card-back {
     transform: scaleX(-1);
 }
+
+.hint-button, .hint-text {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
