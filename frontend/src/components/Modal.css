@@ -47,6 +47,9 @@
 
 .modal-content textarea {
     resize: vertical;
+    height: 300px;
+    min-height: 100px;
+    max-height: 500px;
 }
 
 .modal-buttons {
