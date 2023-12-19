@@ -1,0 +1,19 @@
+.card-set {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 300px; /* Match the width of the card-container */
+    margin: auto; /* Center the card-set in the viewport */
+    position: relative; /* Necessary for absolute positioning of children */
+}
+
+.back-icon {
+    position: inherit;
+    bottom: 10px; /* Adjust this to position above the card */
+    right: 140px; /* Adjust this to position to the left of the card */
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+}

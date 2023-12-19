@@ -37,7 +37,7 @@ const Card: React.FC<CardProps> = ({
         // Trigger swipe and disable further dragging
         onSwipe(deltaX > 0 ? 'right' : 'left');
         setIsDragging(false);
-        setDragDelta(0); // Reset dragDelta after swipe
+        setDragDelta(0);
       }
     }
   };
