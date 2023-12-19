@@ -82,12 +82,12 @@ const EditModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, 
     <div className={`modal ${isOpen ? 'open' : ''}`} onMouseDown={handleOutsideClick}>
       <div className="modal-content">
         {error && <div className="error-message">{error}</div>}
-        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" placeholder="Name" disabled={mode === 'update'} value={name} onChange={(e) => setName(e.target.value)} />
         <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
         <textarea placeholder="Words" value={words} onChange={(e) => setWords(e.target.value)} ></textarea>
         <div className="modal-buttons">
           <button className="cancel" onClick={onClose}>Cancel</button>
-          <button className="add" onClick={handleSubmit}>Add</button>
+          <button className="add" onClick={handleSubmit}>{mode === 'update' ? 'Update' : 'Add'}</button>
         </div>
       </div>
     </div>
