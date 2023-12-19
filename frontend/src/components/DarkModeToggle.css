@@ -48,8 +48,14 @@ body {
     transition: 0.3s ease background-color;
 }
 
-.dark-mode .modal-content p {
-    color: black;
+.dark-mode .modal-content {
+    background-color: #26282b;
+}
+
+.dark-mode .modal-content input,
+.dark-mode .modal-content textarea {
+    background-color: #393d40;
+    border: none;
 }
 
 /* Toggle style */

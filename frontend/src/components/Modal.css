@@ -65,13 +65,13 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    background-color: #007bff; /* Primary button color */
+    background-color: #418af4; /* Primary button color */
     color: white;
 }
 
 .modal-content button.add:hover,
 .modal-content button.confirm:hover {
-    background-color: #0056b3; /* Darker shade for hover */
+    background-color: #366ebe; /* Darker shade for hover */
 }
 
 .modal-content button.cancel {
