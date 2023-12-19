@@ -24,20 +24,20 @@ const Card: React.FC<CardProps> = ({
 
   const swipeThreshold = 200; // Swipe threshold
 
-  const handleGestureStart = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('.hint-button, .hint-text')) {
+  const handleGestureStart = (target: EventTarget, clientX: number) => {
+    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
       return; // Do nothing if the click was on the hint
     }
-    setStartX(e.clientX);
+    setStartX(clientX);
     setIsDragging(true);
   };
 
-  const handleGestureMove = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('.hint-button, .hint-text')) {
+  const handleGestureMove = (target: EventTarget, clientX: number) => {
+    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
       return; // Do nothing if the click was on the hint
     }
     if (isDragging) {
-      const deltaX = e.clientX - startX;
+      const deltaX = clientX - startX;
       setDragDelta(deltaX);
 
       if (Math.abs(deltaX) > swipeThreshold) {
@@ -49,15 +49,16 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
-  const handleGestureEnd = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('.hint-button, .hint-text')) {
+  const handleGestureEnd = (target: EventTarget) => {
+    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
       return; // Do nothing if the click was on the hint
     }
     if (Math.abs(dragDelta) < 10) {
       setIsFlipped(!isFlipped);  // Flip the card on a click (not drag)
     }
     setIsDragging(false);
-    setDragDelta(0); // Reset dragDelta when gesture ends
+    setDragDelta(0);
+    setStartX(0);
   };
 
   const handleHintClick = () => {
@@ -68,7 +69,7 @@ const Card: React.FC<CardProps> = ({
     return text.charAt(0) + '_'.repeat(text.length - 1);
   };
 
-  const dragTransform = `translateX(${dragDelta}px)`;
+  const dragTransform = `translateX(${isDragging ? dragDelta : 0}px)`;
   const flippedTransform = `rotateY(${isFlipped ? 180 : 0}deg)`;
   const cardStyle = {
     transform: `${dragTransform} ${flippedTransform}`,
@@ -78,9 +79,9 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       className={`card-container`}
-      onMouseDown={(e) => handleGestureStart(e)}
-      onMouseMove={(e) => handleGestureMove(e)}
-      onMouseUp={(e) => handleGestureEnd(e)}
+      onMouseDown={(e) => handleGestureStart(e.target, e.clientX)}
+      onMouseMove={(e) => handleGestureMove(e.target, e.clientX)}
+      onMouseUp={(e) => handleGestureEnd(e.target)}
     >
       <div
         className={`background-card`}

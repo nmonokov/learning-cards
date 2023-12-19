@@ -1,11 +1,12 @@
 .collection {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Four columns of equal width */
+    grid-template-rows: repeat(auto-fill, minmax(200px, 1fr)); /* Four columns of equal width */
+    gap: 20px; /* Consistent gap between rows and columns */
     padding: 20px;
-    justify-content: center;
-    align-items: center;
-    max-width: 800px;
+    justify-content: center; /* Center items horizontally */
+    max-width: 1000px;
+    height: 100%;
     margin: auto;
 }
 
@@ -16,12 +17,12 @@
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 200px;
+    height: 200px; /* Fixed height */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: left;
     overflow: hidden;
 }
 

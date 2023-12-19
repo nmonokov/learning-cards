@@ -1,0 +1,131 @@
+/* Light mode styles */
+.light-mode {
+    background-color: white;
+    color: black;
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #343541;
+    color: white;
+}
+
+/* Card styles in dark mode */
+.dark-mode .background-card,
+.dark-mode .card .card-front,
+.dark-mode .card .card-back,
+.dark-mode .card-set-collection-view-set
+{
+    background-color: #000000;
+    color: white;
+    border: none;
+}
+
+.dark-mode .card-set-new {
+    background-color: #343541;
+}
+
+.dark-mode .card-set-new {
+    border: 2px dashed white;
+}
+.dark-mode .card-set-new i,
+.dark-mode .card-set-header i {
+    color: white
+}
+
+/* Toggle style */
+* {
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    background-color: #fff;
+    transition: background-color 0.3s;
+}
+
+#toggle_checkbox {
+    display: none;
+}
+
+label {
+    position: fixed; /* Changed to 'fixed' to position relative to the viewport */
+    top: 20px; /* Adjust the distance from the top */
+    left: 20px; /* Adjust the distance from the right */
+    width: 60px; /* Size of the toggle */
+    height: 30px; /* Size of the toggle */
+    background-color: #77b5fe;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease background-color;
+    overflow: hidden;
+}
+
+#star {
+    position: absolute;
+    top: 6px; /* Adjusted for smaller size */
+    left: 6px; /* Adjusted for smaller size */
+    width: 18px; /* Smaller star size */
+    height: 18px; /* Smaller star size */
+    background-color: #fafd0f;
+    transform: scale(1);
+    border-radius: 50%;
+    transition: 0.3s ease all;
+    z-index: 1;
+}
+
+.star {
+    position: absolute;
+    top: 0;
+    left: -3px; /* Adjusted for smaller size */
+    font-size: 27px; /* Smaller font size */
+    line-height: 14px; /* Adjusted for smaller size */
+    color: #fafd0f;
+    transition: 0.3s ease color;
+}
+
+#moon {
+    position: absolute;
+    bottom: -26px; /* Adjusted for smaller size */
+    right: 4px; /* Adjusted for smaller size */
+    width: 20px; /* Smaller moon size */
+    height: 20px; /* Smaller moon size */
+    background-color: #fff;
+    border-radius: 50%;
+    transition: 0.3s ease all;
+}
+
+#moon:before {
+    content: "";
+    position: absolute;
+    top: -6px; /* Adjusted for smaller size */
+    left: -8.5px; /* Adjusted for smaller size */
+    width: 20px; /* Smaller size */
+    height: 20px; /* Smaller size */
+    background-color: #03a9f4;
+    border-radius: 50%;
+    transition: 0.3s ease all;
+}
+
+#toggle_checkbox:checked + label {
+    background-color: #000;
+}
+
+#toggle_checkbox:checked + label #star {
+    top: 2px; /* Adjusted for smaller size */
+    left: 32px; /* Adjusted for smaller size */
+    transform: scale(0.3);
+    background-color: yellow;
+}
+
+#toggle_checkbox:checked + label .star {
+    color: yellow;
+}
+
+#toggle_checkbox:checked + label #moon {
+    bottom: 4px; /* Adjusted for smaller size */
+}
+
+#toggle_checkbox:checked + label #moon:before {
+    background-color: #000;
+}

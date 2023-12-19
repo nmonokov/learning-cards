@@ -6,6 +6,13 @@
     user-select: none; /* Prevent text selection */
 }
 
+.card-container {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    user-select: none;
+}
+
 .background-card,
 .card-front,
 .card-back {
