@@ -7,6 +7,8 @@ type CardProps = {
   onSwipe: (direction: 'left' | 'right') => void;
   firstCard: boolean;
   lastCard: boolean;
+  onBookmarkToggle: (word: string, translation: string) => void;
+  isCurrentlyBookmarked?: boolean;
 };
 
 const Card: React.FC<CardProps> = ({
@@ -15,27 +17,24 @@ const Card: React.FC<CardProps> = ({
    onSwipe,
    firstCard,
    lastCard,
+   onBookmarkToggle,
+   isCurrentlyBookmarked,
 }) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>(0);
   const [dragDelta, setDragDelta] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showHint, setShowHint] = useState<boolean>(false);
+  const [bookMarked, setBookmarked] = useState<boolean>(isCurrentlyBookmarked || false);
 
   const swipeThreshold = 200; // Swipe threshold
 
-  const handleGestureStart = (target: EventTarget, clientX: number) => {
-    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
-      return; // Do nothing if the click was on the hint
-    }
+  const handleGestureStart = (clientX: number) => {
     setStartX(clientX);
     setIsDragging(true);
   };
 
-  const handleGestureMove = (target: EventTarget, clientX: number) => {
-    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
-      return; // Do nothing if the click was on the hint
-    }
+  const handleGestureMove = (clientX: number) => {
     if (isDragging) {
       const deltaX = clientX - startX;
       setDragDelta(deltaX);
@@ -49,19 +48,18 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
-  const handleGestureEnd = (target: EventTarget) => {
-    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
-      return; // Do nothing if the click was on the hint
-    }
+  const handleGestureEnd = () => {
     setIsDragging(false);
     setDragDelta(0);
   };
 
-  const handleFlip = (target: EventTarget) => {
-    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
+  const handleFlip = (target: EventTarget, clientX: number) => {
+    if ((target as HTMLElement).closest('.hint-button, .hint-text, .bookmark-button')) {
       return; // Do nothing if the click was on the hint
     }
-    setIsFlipped(!isFlipped);
+    if (Math.abs(startX - clientX) < 1) {
+      setIsFlipped(!isFlipped);
+    }
   }
 
   const handleHintClick = () => {
@@ -70,6 +68,11 @@ const Card: React.FC<CardProps> = ({
 
   const getHint = (text: string) => {
     return text.charAt(0) + '_'.repeat(text.length - 1);
+  };
+
+  const handleBookmarkClick = () => {
+    setBookmarked(!bookMarked);
+    onBookmarkToggle(word, translation);
   };
 
   const dragTransform = `translateX(${dragDelta}px)`;
@@ -81,14 +84,14 @@ const Card: React.FC<CardProps> = ({
   const backCardVisibility = (firstCard && dragDelta > 0) || (lastCard && dragDelta < 0) ? 'hidden': 'visible';
   return (
     <div
-      className={`card-container`}
-      onMouseDown={(e) => handleGestureStart(e.target, e.clientX)}
-      onMouseMove={(e) => handleGestureMove(e.target, e.clientX)}
-      onMouseUp={(e) => handleGestureEnd(e.target)}
-      onClick={(e) => handleFlip(e.target)}
+      className="card-container"
+      onMouseDown={(e) => handleGestureStart(e.clientX)}
+      onMouseMove={(e) => handleGestureMove(e.clientX)}
+      onMouseUp={handleGestureEnd}
+      onClick={(e) => handleFlip(e.target, e.clientX)}
     >
       <div
-        className={`background-card`}
+        className="background-card"
         style={{
           opacity: backCardOpacity,
           visibility: backCardVisibility,
@@ -100,13 +103,23 @@ const Card: React.FC<CardProps> = ({
           {word}
           {!showHint ? (
             <div className="hint-button" onClick={handleHintClick}>
-              <i className="fas fa-lightbulb"></i> hint
+              <i className="far fa-lightbulb"></i> hint
             </div>
           ) : (
             <div className="hint-text" onClick={handleHintClick}>
               <i className="fas fa-lightbulb"></i> {getHint(translation)}
             </div>
           )}
+          {bookMarked ? (
+            <div className="bookmark-button" onClick={handleBookmarkClick}>
+              <i className="fas fa-bookmark"></i>
+            </div>
+          ) : (
+            <div className="bookmark-button" onClick={handleBookmarkClick}>
+              <i className="fa-regular fa-bookmark"></i>
+            </div>
+          )}
+
         </div>
         <div className="card-back">{translation}</div>
       </div>

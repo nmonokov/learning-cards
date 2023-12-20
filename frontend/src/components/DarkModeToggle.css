@@ -35,6 +35,7 @@ body {
 }
 .dark-mode .card-set-new i,
 .dark-mode .card-set-header i,
+.dark-mode .bookmark-button,
 .dark-mode .modal-content input,
 .dark-mode .modal-content textarea {
     color: white

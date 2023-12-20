@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Collection.css';
-import { CollectionData, data } from '../data/cardCollections';
+import { CardData, CollectionData, data } from '../data/cardCollections';
 import EditModal from './EditModal';
 import ConfirmModal from './ConfirmModal';
 
-export const getCardSets = () => Object.entries(data).map(([id, collection]) => {
+const getCardSets = () => Object.entries(data).map(([id, collection]) => {
   return {
     id,
     name: collection.name,
     description: collection.description,
   };
 });
+
+export const getBookmarkedCards = () => Object.values(data).reduce((acc: CardData[], collection: CollectionData) => {
+  const bookmarkedCards: CardData[] = collection.cards?.filter((card: CardData) => card.bookmarked);
+  acc.push(...bookmarkedCards);
+  return acc;
+}, []);
 
 const Collection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +28,7 @@ const Collection = () => {
 
   const navigate = useNavigate();
   const cardSets = getCardSets();
+  const bookmarkedCards = { cards: getBookmarkedCards() };
 
   const navigateToCardSet = (target: EventTarget, setId: string) => {
     if ((target as HTMLElement).closest('.edit-button, .delete-button')) {
@@ -68,6 +75,11 @@ const Collection = () => {
 
   return (
     <div className="collection">
+      {bookmarkedCards?.cards?.length > 0 ?
+        <div key='bookmarks' className="bookmarked-card-set" onClick={(e) => navigateToCardSet(e.target, 'bookmarks')}>
+          <i className="fas fa-bookmark"></i>
+        </div>
+      : ''}
       {cardSets.map((set) => (
         <div key={set.id} className="card-set-collection-view-set" onClick={(e) => navigateToCardSet(e.target, set.id)}>
           <div className="card-set-collection-header">

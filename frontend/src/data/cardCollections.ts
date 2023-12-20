@@ -1,6 +1,7 @@
 export interface CardData {
   word: string;
   translation: string;
+  bookmarked?: boolean;
 }
 
 export interface CollectionData {
