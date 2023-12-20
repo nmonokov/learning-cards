@@ -53,13 +53,16 @@ const Card: React.FC<CardProps> = ({
     if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
       return; // Do nothing if the click was on the hint
     }
-    if (Math.abs(dragDelta) < 10) {
-      setIsFlipped(!isFlipped);  // Flip the card on a click (not drag)
-    }
     setIsDragging(false);
     setDragDelta(0);
-    setStartX(0);
   };
+
+  const handleFlip = (target: EventTarget) => {
+    if ((target as HTMLElement).closest('.hint-button, .hint-text')) {
+      return; // Do nothing if the click was on the hint
+    }
+    setIsFlipped(!isFlipped);
+  }
 
   const handleHintClick = () => {
     setShowHint(!showHint);
@@ -69,7 +72,7 @@ const Card: React.FC<CardProps> = ({
     return text.charAt(0) + '_'.repeat(text.length - 1);
   };
 
-  const dragTransform = `translateX(${isDragging ? dragDelta : 0}px)`;
+  const dragTransform = `translateX(${dragDelta}px)`;
   const flippedTransform = `rotateY(${isFlipped ? 180 : 0}deg)`;
   const cardStyle = {
     transform: `${dragTransform} ${flippedTransform}`,
@@ -82,6 +85,7 @@ const Card: React.FC<CardProps> = ({
       onMouseDown={(e) => handleGestureStart(e.target, e.clientX)}
       onMouseMove={(e) => handleGestureMove(e.target, e.clientX)}
       onMouseUp={(e) => handleGestureEnd(e.target)}
+      onClick={(e) => handleFlip(e.target)}
     >
       <div
         className={`background-card`}
