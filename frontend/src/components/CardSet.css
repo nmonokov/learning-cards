@@ -10,7 +10,7 @@
 }
 
 .back-icon {
-    right: 120px; /* Adjust this to position to the left of the card */
+    left: 0; /* Adjust this to position to the left of the card */
     font-size: 24px;
     color: #333;
     cursor: pointer;
@@ -25,7 +25,14 @@
     display: flex;
     align-items: center; /* Align items vertically */
     justify-content: space-between; /* Space out items */
-    /*padding: 10px; !* Add padding for spacing *!*/
     padding-bottom: 10px;
     width: 100%;
+}
+
+.shuffle-icon {
+    position: absolute;
+    right: 0;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
 }

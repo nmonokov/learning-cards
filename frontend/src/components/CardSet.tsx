@@ -31,6 +31,7 @@ const CardSet = () => {
     throw Error('Invokes without param');
   }
   const initialCards = setId === 'bookmarks' ? getBookmarkedCards() : getCardData(setId);
+  const [cards, setCards] = useState(initialCards);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleSwipe = (direction: 'left' | 'right') => {
@@ -39,7 +40,6 @@ const CardSet = () => {
     } else if (direction === 'right' && currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
-
   };
 
   const navigate = useNavigate();
@@ -49,16 +49,24 @@ const CardSet = () => {
 
   const handleBookmarkToggle = (word: string, translation: string) => {
     let id = setId;
-    let cards = initialCards;
+    let cardData = initialCards;
     if (setId === 'bookmarks') {
       id = findSetIdByBookMarkedWord(word, translation);
-      cards = getCardData(id)
+      cardData = getCardData(id)
     }
-    const updatedCards: CardData[] = cards.map((card: CardData) =>
+    const updatedCards: CardData[] = cardData.map((card: CardData) =>
       card.word === word ? {...card, bookmarked: !card.bookmarked} : card,
     );
     updateCards(id, updatedCards);
+    setCards(updatedCards);
   };
+
+  const handleShuffleCards = () => {
+    const shuffleCards = [...initialCards].sort(() => Math.random() - 0.5);
+    setCards(shuffleCards);
+    updateCards(setId, shuffleCards);
+    setCurrentIndex(0);
+  }
 
   const cardsCounter = `${currentIndex + 1} / ${initialCards.length}`;
 
@@ -67,18 +75,21 @@ const CardSet = () => {
       <div className="card-set-header">
         <i className="fas fa-arrow-left back-icon" onClick={goBack}></i> {/* Back icon */}
         <div className="cards-counter">{cardsCounter}</div>
+        {setId !== 'bookmarks' ?
+          <i className="fas fa-random shuffle-icon" onClick={handleShuffleCards}></i>
+          : ''}
       </div>
       {initialCards.length > 0 && (
         /* Card component */
         <Card
           key={currentIndex}
-          word={initialCards[currentIndex].word}
-          translation={initialCards[currentIndex].translation}
+          word={cards[currentIndex].word}
+          translation={cards[currentIndex].translation}
           onSwipe={handleSwipe}
           firstCard={currentIndex === 0}
-          lastCard={currentIndex === initialCards.length - 1}
+          lastCard={currentIndex === cards.length - 1}
           onBookmarkToggle={handleBookmarkToggle}
-          isCurrentlyBookmarked={initialCards[currentIndex].bookmarked}
+          isCurrentlyBookmarked={cards[currentIndex].bookmarked}
         />
       )}
     </div>
