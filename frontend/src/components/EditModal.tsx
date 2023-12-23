@@ -26,7 +26,7 @@ const EditModal: React.FC<AddCardSetModalProps> = ({ isOpen, onClose, onUpsert, 
       setName(data.name || '');
       setDescription(data.description || '');
       setWords(convertWordsForEdit(data.cards));
-    } else if (mode === 'new') {
+    } else {
       setName('');
       setDescription('');
       setWords('');
