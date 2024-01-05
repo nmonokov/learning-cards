@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Card.css';
 
 type CardProps = {
@@ -25,7 +25,11 @@ const Card: React.FC<CardProps> = ({
   const [dragDelta, setDragDelta] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [showHint, setShowHint] = useState<boolean>(false);
-  const [bookMarked, setBookmarked] = useState<boolean>(isCurrentlyBookmarked || false);
+  const [bookMarked, setBookmarked] = useState<boolean>(false);
+
+  useEffect(() => {
+    setBookmarked(isCurrentlyBookmarked || false);
+  }, [isCurrentlyBookmarked]);
 
   const swipeThreshold = 200; // Swipe threshold
 

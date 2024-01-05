@@ -62,7 +62,7 @@ const CardSet = () => {
   };
 
   const handleShuffleCards = () => {
-    const shuffleCards = [...initialCards].sort(() => Math.random() - 0.5);
+    const shuffleCards = [...cards].sort(() => Math.random() - 0.5);
     setCards(shuffleCards);
     updateCards(setId, shuffleCards);
     setCurrentIndex(0);
