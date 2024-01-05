@@ -57,8 +57,17 @@ const CardSet = () => {
     const updatedCards: CardData[] = cardData.map((card: CardData) =>
       card.word === word ? {...card, bookmarked: !card.bookmarked} : card,
     );
+
     updateCards(id, updatedCards);
-    setCards(updatedCards);
+    if (setId === 'bookmarks') {
+      const bookmarkedCards = getBookmarkedCards();
+      setCards(bookmarkedCards);
+      if (bookmarkedCards.length === 0) {
+        goBack();
+      }
+    } else {
+      setCards(updatedCards);
+    }
   };
 
   const handleShuffleCards = () => {
@@ -68,7 +77,7 @@ const CardSet = () => {
     setCurrentIndex(0);
   }
 
-  const cardsCounter = `${currentIndex + 1} / ${initialCards.length}`;
+  const cardsCounter = `${initialCards.length > 0 ? currentIndex + 1 : 0} / ${initialCards.length}`;
 
   return (
     <div className="card-set">
