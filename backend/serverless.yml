@@ -1,0 +1,30 @@
+service: learning-cards-backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${self:custom.region}
+  stage: ${self:custom.stage}
+  deploymentBucket:
+    name: sls-deploy-${opt:account, 'serverless'}-${self:provider.region}
+    serverSideEncryption: AES256
+  httpApi:
+    cors: true
+
+custom:
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-central-1'}
+
+functions:
+  test:
+    handler: backend/src/handler.ts
+    events:
+      - http:
+          path: test
+          method: get
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-deployment-bucket
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies

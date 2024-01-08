@@ -1,0 +1,25 @@
+service: learning-cards-frontend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${self:custom.region}
+  stage: ${self:custom.stage}
+  deploymentBucket:
+    name: sls-deploy-${opt:account, 'serverless'}-${self:provider.region}
+    serverSideEncryption: AES256
+  httpApi:
+    cors: true
+
+custom:
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-central-1'}
+  client:
+    bucketName: learning-cards-spa-${self:custom.stage}
+    indexDocument: index.html
+    errorDocument: index.html
+    distributionFolder: build
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-finch
