@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate  } from 'react-router-dom';
 import Card from './Card';
 import './CardSet.css';
-import { CardData, data, } from '../data/cardCollections';
+import { CardData, data, } from '../../data/cardCollections';
 import { getBookmarkedCards } from './Collection';
 
 type CardSetParams = {

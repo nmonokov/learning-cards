@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Collection.css';
-import { CardData, CollectionData, data } from '../data/cardCollections';
-import EditModal from './EditModal';
-import ConfirmModal from './ConfirmModal';
+import { CardData, CollectionData, data } from '../../data/cardCollections';
+import EditModal from '../modal/EditModal';
+import ConfirmModal from '../modal/ConfirmModal';
 
 const getCardSets = () => Object.entries(data).map(([id, collection]) => {
   return {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Modal.css';
-import { CardData } from '../data/cardCollections';
+import { CardData } from '../../data/cardCollections';
 
 type AddCardSetModalProps = {
   isOpen: boolean;

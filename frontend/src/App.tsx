@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { DarkModeProvider } from './components/DarkModeContext';
-import Collection from './components/Collection';
-import CardSet from './components/CardSet';
-import DarkModeToggle from './components/DarkModeToggle';
+import { DarkModeProvider } from './components/darkmode/DarkModeContext';
+import DarkModeToggle from './components/darkmode/DarkModeToggle';
+import Collection from './components/cards/Collection';
+import CardSet from './components/cards/CardSet';
 
 const App: React.FC = () => {
   return (

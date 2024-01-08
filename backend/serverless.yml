@@ -17,11 +17,13 @@ custom:
 
 functions:
   test:
-    handler: backend/src/handler.ts
+    handler: src/handler.test
     events:
       - http:
           path: test
           method: get
+  authorizer:
+    handler: src/cognito.authorizer
 
 plugins:
   - serverless-plugin-typescript
