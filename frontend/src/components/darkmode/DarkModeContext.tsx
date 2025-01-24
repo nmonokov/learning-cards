@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type DarkModeContextType = {
   isDarkMode: boolean;
@@ -14,9 +14,14 @@ type DarkModeProviderProps = {
 export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const toggleDarkMode = useCallback(() => {
+    setIsDarkMode(prev => !prev);
+  }, []);
+
+  const contextValue = useMemo(() => ({
+    isDarkMode,
+    toggleDarkMode,
+  }), [isDarkMode, toggleDarkMode]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -27,7 +32,7 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) 
   }, [isDarkMode]);
 
   return (
-    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <DarkModeContext.Provider value={contextValue}>
       {children}
     </DarkModeContext.Provider>
   );

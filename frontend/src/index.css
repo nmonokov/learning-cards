@@ -28,3 +28,11 @@ body {
 .flex.center {
   justify-content: center;
 }
+
+:root {
+  --primary-color: #2d3436;
+  --secondary-color: #636e72;
+  --border-color: #e0e0e0;
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --transition-fast: all 0.2s ease;
+}

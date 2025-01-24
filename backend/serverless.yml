@@ -8,22 +8,69 @@ provider:
   deploymentBucket:
     name: sls-deploy-${opt:account, 'serverless'}-${self:provider.region}
     serverSideEncryption: AES256
-  httpApi:
-    cors: true
+  environment:
+    REGION: ${self:custom.region}
+    COGNITO_USER_POOL_ID: ${ssm:/app/cognito/user_pool_id}
+    COGNITO_CLIENT_ID: ${ssm:/app/cognito/client_id}
+    COGNITO_CLIENT_SECRET: ${ssm:/app/cognito/client_secret}
+#    COGNITO_USER_POOL_ID: "CHANGE_AFTER_FIRST_DEPLOYMENT"
+#    COGNITO_CLIENT_ID: "CHANGE_AFTER_FIRST_DEPLOYMENT"
+#    COGNITO_CLIENT_SECRET: "CHANGE_AFTER_FIRST_DEPLOYMENT"
+    COGNITO_DOMAIN: ${self:custom.names.cognito.domain}
+    ORIGIN: ${self:custom.values.origin}
+    REDIRECT_URI: ${self:custom.values.redirectUrl}
+    # Used internally by aws-jwt-verify
+    JWT_ISSUER: https://cognito-idp.${self:provider.region}.amazonaws.com/${self:provider.environment.COGNITO_USER_POOL_ID}
 
 custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-central-1'}
+  names:
+    cognito:
+      domain: learning-cards-${self:custom.stage}
+  values:
+    origin: ${file(config/${self:custom.stage}.json):origin}
+    redirectUrl: ${self:custom.values.origin}/auth/callback
+  authorizer:
+    name: authorizer
+    arn: !GetAtt AuthorizerLambdaFunction.Arn
+    type: request
+  cors:
+    origin: ${self:custom.values.origin}
+    headers:
+      - Content-Type
+      - Authorization
+      - X-Amz-Date
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - Access-Control-Allow-Headers
+      - Access-Control-Allow-Origin
+      - X-Requested-With
+    allowCredentials: true
 
 functions:
-  test:
-    handler: src/handler.test
+  token:
+    handler: src/authentication.token
     events:
       - http:
-          path: test
-          method: get
+          path: /auth/token
+          method: post
+          cors: ${self:custom.cors}
+
   authorizer:
-    handler: src/cognito.authorizer
+    handler: src/authorizer.verify
+
+  welcome:
+    handler: src/handler.welcome
+    events:
+      - http:
+          path: welcome
+          method: get
+          cors: ${self:custom.cors}
+          authorizer: ${self:custom.authorizer}
+
+resources:
+  - ${file(templates/cognito.yml)}
 
 plugins:
   - serverless-plugin-typescript

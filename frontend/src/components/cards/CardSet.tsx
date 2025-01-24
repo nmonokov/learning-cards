@@ -3,7 +3,7 @@ import { useParams, useNavigate  } from 'react-router-dom';
 import Card from './Card';
 import './CardSet.css';
 import { CardData, data, } from '../../data/cardCollections';
-import { getBookmarkedCards } from './Collection';
+import { getBookmarkedCards } from '../dashboard/Dashboard';
 
 type CardSetParams = {
   setId: string;
@@ -44,7 +44,7 @@ const CardSet = () => {
 
   const navigate = useNavigate();
   const goBack = () => {
-    navigate('/'); // Navigate back to the collection page
+    navigate('/dashboard'); // Navigate back to the collection page
   };
 
   const handleBookmarkToggle = (word: string, translation: string) => {

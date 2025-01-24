@@ -20,14 +20,19 @@ body {
 .dark-mode .background-card,
 .dark-mode .card .card-front,
 .dark-mode .card .card-back,
-.dark-mode .card-set-collection-view-set {
+.dark-mode .card-set-collection-view-set,
+.dark-mode .user-message-badge,
+.dark-mode .landing-page,
+.dark-mode .landing-page__card {
     background-color: #000000;
     color: white;
     border: none;
 }
 
-.dark-mode .card-set-new {
+.dark-mode .card-set-new,
+.dark-mode .google-login-btn {
     background-color: #161617;
+    border: none;
 }
 
 .dark-mode .card-set-new {
@@ -37,6 +42,9 @@ body {
 .dark-mode .card-set-header i,
 .dark-mode .bookmark-button,
 .dark-mode .modal-content input,
+.dark-mode .google-login-btn__text,
+.dark-mode .landing-page__title,
+.dark-mode .landing-page__subtitle,
 .dark-mode .modal-content textarea {
     color: white
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Collection.css';
+import './Dashboard.css';
 import { CardData, CollectionData, data } from '../../data/cardCollections';
 import EditModal from '../modal/EditModal';
 import ConfirmModal from '../modal/ConfirmModal';
+import { useWelcomeMessage } from './hooks/useWelcomeMessage';
 
 const getCardSets = () => Object.entries(data).map(([id, collection]) => {
   return {
@@ -19,12 +20,13 @@ export const getBookmarkedCards = () => Object.values(data).reduce((acc: CardDat
   return acc;
 }, []);
 
-const Collection = () => {
+const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cardSetEdit, setCardSetEdit] = useState({});
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [mode, setMode] = useState('new');
   const [deleteCardSetId, setDeleteCardSetId] = useState('');
+  const { message, loading } = useWelcomeMessage();
 
   const navigate = useNavigate();
   const cardSets = getCardSets();
@@ -75,6 +77,16 @@ const Collection = () => {
 
   return (
     <div className="collection">
+      <div className="user-message-badge">
+        {loading ? (
+          <span className="loading-dots">Loading</span>
+        ) : (
+          <>
+            <i className="fas fa-user" />
+            <span title={message}>{message || 'Welcome!'}</span>
+          </>
+        )}
+      </div>
       {bookmarkedCards?.cards?.length > 0 ?
         <div key='bookmarks' className="bookmarked-card-set" onClick={(e) => navigateToCardSet(e.target, 'bookmarks')}>
           <i className="fas fa-bookmark"></i>
@@ -115,4 +127,4 @@ const Collection = () => {
   );
 };
 
-export default Collection;
+export default Dashboard;

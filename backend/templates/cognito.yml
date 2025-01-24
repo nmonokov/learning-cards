@@ -1,0 +1,55 @@
+Resources:
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: learning-cards-userpool-${self:custom.stage}
+      AutoVerifiedAttributes: [email]
+      UsernameAttributes: [email]
+
+  CognitoIdentityProvider:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      ProviderName: Google
+      ProviderType: Google
+      ProviderDetails:
+        client_id: ${ssm:/app/google/client_id}
+        client_secret: ${ssm:/app/google/client_secret}
+        authorize_scopes: email profile openid
+      AttributeMapping:
+        email: email
+        given_name: given_name
+        family_name: family_name
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: learning-cards-web-client-${self:custom.stage}
+      UserPoolId: !Ref CognitoUserPool
+      GenerateSecret: true
+      SupportedIdentityProviders:
+        - Google
+      CallbackURLs:
+        - ${self:custom.values.redirectUrl}
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      AllowedOAuthFlowsUserPoolClient: true
+      EnableTokenRevocation: true
+      AllowedOAuthFlows: [code]
+      AllowedOAuthScopes: [email, openid, profile]
+    DependsOn: CognitoIdentityProvider
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: ${self:custom.names.cognito.domain}
+      UserPoolId: !Ref CognitoUserPool
+
+Outputs:
+  CognitoUserPoolId:
+    Value: !Ref CognitoUserPool
+  CognitoUserPoolClientId:
+    Value: !Ref CognitoUserPoolClient
+  CognitoUserPoolClientSecret:
+    Value: !GetAtt CognitoUserPoolClient.ClientSecret
