@@ -2,7 +2,7 @@ Resources:
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: learning-cards-userpool-${self:custom.stage}
+      UserPoolName: ${self:custom.values.cognito.userPoolName}
       AutoVerifiedAttributes: [email]
       UsernameAttributes: [email]
 

@@ -9,16 +9,15 @@ provider:
     name: sls-deploy-${opt:account, 'serverless'}-${self:provider.region}
     serverSideEncryption: AES256
   environment:
+    LOG_LEVEL: ${file(config/${self:custom.stage}.json):logLevel}
     REGION: ${self:custom.region}
-    COGNITO_USER_POOL_ID: ${ssm:/app/cognito/user_pool_id}
-    COGNITO_CLIENT_ID: ${ssm:/app/cognito/client_id}
-    COGNITO_CLIENT_SECRET: ${ssm:/app/cognito/client_secret}
-#    COGNITO_USER_POOL_ID: "CHANGE_AFTER_FIRST_DEPLOYMENT"
-#    COGNITO_CLIENT_ID: "CHANGE_AFTER_FIRST_DEPLOYMENT"
-#    COGNITO_CLIENT_SECRET: "CHANGE_AFTER_FIRST_DEPLOYMENT"
+    COGNITO_USER_POOL_ID: ${self:custom.values.cognito.userPoolId}
+    COGNITO_CLIENT_ID: ${self:custom.values.cognito.clientId}
+    COGNITO_CLIENT_SECRET: ${self:custom.values.cognito.clientSecret}
     COGNITO_DOMAIN: ${self:custom.names.cognito.domain}
     ORIGIN: ${self:custom.values.origin}
     REDIRECT_URI: ${self:custom.values.redirectUrl}
+    EMAILS_WHITE_LIST: ${self:custom.values.emailsWhiteList}
     # Used internally by aws-jwt-verify
     JWT_ISSUER: https://cognito-idp.${self:provider.region}.amazonaws.com/${self:provider.environment.COGNITO_USER_POOL_ID}
 
@@ -31,6 +30,15 @@ custom:
   values:
     origin: ${file(config/${self:custom.stage}.json):origin}
     redirectUrl: ${self:custom.values.origin}/auth/callback
+    emailsWhiteList: ${file(config/${self:custom.stage}.json):emailsWhiteList}
+    cognito:
+      userPoolName: learning-cards-userpool-${self:custom.stage}
+      userPoolId: ${ssm:/app/cognito/user_pool_id}
+      clientId: ${ssm:/app/cognito/client_id}
+      clientSecret: ${ssm:/app/cognito/client_secret}
+#      userPoolId: "CHANGE_AFTER_FIRST_DEPLOYMENT"
+#      clientId: "CHANGE_AFTER_FIRST_DEPLOYMENT"
+#      clientSecret: "CHANGE_AFTER_FIRST_DEPLOYMENT"
   authorizer:
     name: authorizer
     arn: !GetAtt AuthorizerLambdaFunction.Arn
@@ -50,7 +58,7 @@ custom:
 
 functions:
   token:
-    handler: src/authentication.token
+    handler: src/cognito/authentication.token
     events:
       - http:
           path: /auth/token
@@ -58,7 +66,7 @@ functions:
           cors: ${self:custom.cors}
 
   authorizer:
-    handler: src/authorizer.verify
+    handler: src/cognito/authorizer.verify
 
   welcome:
     handler: src/handler.welcome
@@ -68,6 +76,15 @@ functions:
           method: get
           cors: ${self:custom.cors}
           authorizer: ${self:custom.authorizer}
+
+  # Cognito Hooks
+  preSignUp:
+    handler: src/cognito/hooks.preSignUp
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.values.cognito.userPoolName}
+          trigger: PreSignUp
+          existing: true
 
 resources:
   - ${file(templates/cognito.yml)}

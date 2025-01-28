@@ -1,10 +1,10 @@
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { APIGatewayRequestAuthorizerEvent } from 'aws-lambda';
+import { property } from '../util/property';
 
-const {
-  COGNITO_USER_POOL_ID,
-  COGNITO_CLIENT_ID,
-} = process.env
+const COGNITO_USER_POOL_ID: string = property('COGNITO_USER_POOL_ID');
+const COGNITO_CLIENT_ID: string = property('COGNITO_CLIENT_ID');
+
 const verifier = CognitoJwtVerifier.create({
   userPoolId: COGNITO_USER_POOL_ID,
   clientId: COGNITO_CLIENT_ID,

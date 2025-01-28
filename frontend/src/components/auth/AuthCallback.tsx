@@ -11,13 +11,18 @@ const AuthCallback: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const error = params.get('error');
     const code = params.get('code');
+    const error = params.get('error');
+    const errorDescription = params.get('error_description');
 
     const handleAuth = async () => {
       try {
         if (error){
-          console.error('OAuth error:', error);
+          console.error({
+            message: 'OAuth error:',
+            error,
+            errorDescription,
+          });
           navigate('/error?code=auth_failed');
           return;
         }

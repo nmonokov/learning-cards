@@ -1,3 +1,5 @@
 {
-  "origin": "http://localhost:3000"
+  "logLevel": "DEBUG",
+  "origin": "http://localhost:3000",
+  "emailsWhiteList": "nmonokov@gmail.com,debbie.zingerman@gmail.com"
 }

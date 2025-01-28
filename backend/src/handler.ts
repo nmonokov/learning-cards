@@ -1,9 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { corsHeaders } from './http';
+import { corsHeaders } from './util/http';
+import { property } from './util/property';
 
-const {
-  ORIGIN,
-} = process.env;
+const ORIGIN: string = property('ORIGIN');
 
 export const welcome = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const email = event.requestContext.authorizer?.email;

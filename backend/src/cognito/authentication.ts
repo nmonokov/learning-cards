@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { corsHeaders } from './http';
+import { corsHeaders } from '../util/http';
+import { property } from '../util/property';
 
-const {
-  COGNITO_CLIENT_ID,
-  COGNITO_CLIENT_SECRET,
-  COGNITO_DOMAIN,
-  ORIGIN,
-  REGION,
-  REDIRECT_URI,
-  JWT_ISSUER,
-} = process.env
+const COGNITO_CLIENT_ID: string = property('COGNITO_CLIENT_ID');
+const COGNITO_CLIENT_SECRET: string = property('COGNITO_CLIENT_SECRET');
+const COGNITO_DOMAIN: string = property('COGNITO_DOMAIN');
+const ORIGIN: string = property('ORIGIN');
+const REGION: string = property('REGION');
+const REDIRECT_URI: string = property('REDIRECT_URI');
+const JWT_ISSUER: string = property('JWT_ISSUER');
+
 const USED_CODES = new Set();
 setInterval(() => {
   USED_CODES.clear();
@@ -17,7 +17,7 @@ setInterval(() => {
 
 export const token = async (event: any) => {
   console.debug({
-    message: 'Environment variables',
+    message: 'Environment variables.',
     JWT_ISSUER
   });
   const { code } = JSON.parse(event.body);
